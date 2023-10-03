@@ -20,24 +20,24 @@ void TestGetHttps()
     KPH_SOCKET_HANDLE Socket{};
 
     __try {
-        NTSTATUS status = KphInitializeSocket();
-        if (!NT_SUCCESS(status)) {
-
+        NTSTATUS Status = KphInitializeSocket();
+        if (!NT_SUCCESS(Status)) {
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
         }
 
-        status = KphSocketTlsCreate(&Tls);
-        if (!NT_SUCCESS(status)) {
-
+        Status = KphSocketTlsCreate(&Tls);
+        if (!NT_SUCCESS(Status)) {
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
         }
         ASSERT(Tls);
 
         UNICODE_STRING NodeName = RTL_CONSTANT_STRING(L"www.microsoft.com");//IP变化很频繁，且还有可能是IPv6.
         LARGE_INTEGER Timeout = {.QuadPart = -30000000ll}; // 3 seconds
-        status = KphGetAddressInfo(&NodeName, NULL, NULL, &Timeout, &AddressInfo);
-        if (!NT_SUCCESS(status)) {
-
+        Status = KphGetAddressInfo(&NodeName, NULL, NULL, &Timeout, &AddressInfo);
+        if (!NT_SUCCESS(Status)) {
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
         }
 
@@ -56,7 +56,7 @@ void TestGetHttps()
 
             CHAR RemoteIPv4[17]{};
             RtlIpv4AddressToStringA(&RemoteAddress->sin_addr, RemoteIPv4);
-            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "RemoteIPv4:%s.\r\n", RemoteIPv4);
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "RemoteIPv4:%s", RemoteIPv4);
 
             break;
         }
@@ -70,7 +70,7 @@ void TestGetHttps()
 
             CHAR RemoteIPv6[65]{};
             RtlIpv6AddressToStringA(&RemoteAddress->sin6_addr, RemoteIPv6);
-            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "RemoteIPv6:%s.\r\n", RemoteIPv6);
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "RemoteIPv6:%s", RemoteIPv6);
 
             break;
         }
@@ -81,28 +81,28 @@ void TestGetHttps()
 
         USHORT SocketType{SOCK_STREAM};
         ULONG Protocol{IPPROTO_TCP};
-        status = KphSocketConnect(SocketType,
+        Status = KphSocketConnect(SocketType,
                                   Protocol,
                                   LocalAddress,
                                   AddressInfo->ai_addr,
                                   &Timeout,
                                   &Socket);
-        if (!NT_SUCCESS(status)) {
-
+        if (!NT_SUCCESS(Status)) {
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
         }
 
-        status = KphSocketTlsHandshake(Socket, &Timeout, Tls, &NodeName);
-        if (!NT_SUCCESS(status)) {
-
+        Status = KphSocketTlsHandshake(Socket, &Timeout, Tls, &NodeName);
+        if (!NT_SUCCESS(Status)) {
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
         }
 
         const char * Message = "GET / HTTP/1.0\r\n\r\n";
         ULONG Length = (ULONG)strlen(Message);
-        status = KphSocketTlsSend(Socket, &Timeout, Tls, (PVOID)Message, Length);
-        if (!NT_SUCCESS(status)) {
-
+        Status = KphSocketTlsSend(Socket, &Timeout, Tls, (PVOID)Message, Length);
+        if (!NT_SUCCESS(Status)) {
+            Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
         }
 
@@ -112,9 +112,9 @@ void TestGetHttps()
             Length = sizeof(Buffer);
             RtlZeroMemory(Buffer, Length);
             Length--;//空一个字节，用于打印。
-            status = KphSocketTlsRecv(Socket, &Timeout, Tls, Buffer, &Length);
-            if (!NT_SUCCESS(status)) {
-
+            Status = KphSocketTlsRecv(Socket, &Timeout, Tls, Buffer, &Length);
+            if (!NT_SUCCESS(Status)) {
+                Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
                 break;
             }
 
