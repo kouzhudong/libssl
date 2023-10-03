@@ -13,14 +13,15 @@ VOID Unload(_In_ struct _DRIVER_OBJECT * DriverObject)
 }
 
 
-void TestGetHttps()
+NTSTATUS TestGetHttps()
 {
+    NTSTATUS Status = STATUS_UNSUCCESSFUL;
     KPH_TLS_HANDLE Tls = nullptr;
     PADDRINFOEXW AddressInfo{};
     KPH_SOCKET_HANDLE Socket{};
 
     __try {
-        NTSTATUS Status = KphInitializeSocket();
+        Status = KphInitializeSocket();
         if (!NT_SUCCESS(Status)) {
             Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
@@ -138,6 +139,8 @@ void TestGetHttps()
 
         KphCleanupSocket();
     }
+
+    return Status;
 }
 
 
@@ -167,7 +170,7 @@ EXTERN_C NTSTATUS DriverEntry(_In_ PDRIVER_OBJECT DriverObject, _In_ PUNICODE_ST
 
     DriverObject->DriverUnload = Unload;
 
-    TestGetHttps();
+    Status = TestGetHttps();
 
     return Status;
 }
