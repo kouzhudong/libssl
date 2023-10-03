@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{2B35A6C9-1F1C-4856-87D6-DFA78F482350}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A193248-6890-4D25-8D45-D0D574328527} = {5A193248-6890-4D25-8D45-D0D574328527}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libssl", "libssl\libssl.vcxproj", "{5A193248-6890-4D25-8D45-D0D574328527}"
 EndProject
