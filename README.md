@@ -16,3 +16,5 @@ https://github.com/winsiderss/systeminformer.git
 本仓库参考的版本是：SHA-1: a3c639140649dec395d150a1bb54205f7bb93970  
 
 本工程，只是整理下上面的代码，并写个测试示例而已。  
+
+注释：本工程只配置了x64的debug的编译。  
