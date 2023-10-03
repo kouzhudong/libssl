@@ -66,7 +66,7 @@ void TestGetHttps()
             LocalAddress = (PSOCKADDR)&LocalAddressV6;
 
             PSOCKADDR_IN6 RemoteAddress = (PSOCKADDR_IN6)AddressInfo->ai_addr;
-            RemoteAddress->sin6_family = RtlUshortByteSwap(IPPORT_HTTPS);
+            RemoteAddress->sin6_port = RtlUshortByteSwap(IPPORT_HTTPS);
 
             CHAR RemoteIPv6[65]{};
             RtlIpv6AddressToStringA(&RemoteAddress->sin6_addr, RemoteIPv6);
