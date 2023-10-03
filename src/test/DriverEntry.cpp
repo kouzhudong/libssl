@@ -81,12 +81,7 @@ void TestGetHttps()
 
         USHORT SocketType{SOCK_STREAM};
         ULONG Protocol{IPPROTO_TCP};
-        Status = KphSocketConnect(SocketType,
-                                  Protocol,
-                                  LocalAddress,
-                                  AddressInfo->ai_addr,
-                                  &Timeout,
-                                  &Socket);
+        Status = KphSocketConnect(SocketType, Protocol, LocalAddress, AddressInfo->ai_addr, &Timeout, &Socket);
         if (!NT_SUCCESS(Status)) {
             Print(DPFLTR_DEFAULT_ID, DPFLTR_INFO_LEVEL, "Status:%#x", Status);
             __leave;
@@ -106,7 +101,7 @@ void TestGetHttps()
             __leave;
         }
 
-        CHAR Buffer[MAX_PATH];
+        CHAR Buffer[MAX_PATH];//建议用一帧的大小，大多是4096，应该可以用IOCTL查询出。
 
         for (;;) {
             Length = sizeof(Buffer);
