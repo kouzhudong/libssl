@@ -19,3 +19,10 @@ https://github.com/PKRoma/ProcessHacker 也有相似的代码。
 本工程，只是整理下上面的代码，并写个测试示例而已。  
 
 注释：本工程只配置了x64的debug的编译。  
+
+使用说明：
+1. 包含头文件libssl.h。
+2. 包含库文件libssl.lib。不同的版本在不同的位置。
+3. 相应的也应包含libssl.lib动态依赖的库，如：$(DDK_LIB_PATH)\Ksecdd.lib 和 $(DDK_LIB_PATH)\Netio.lib。
+4. 具体的用法见本仓库的测试工程。
+5. 如有问题请在这里反馈。
